@@ -34,8 +34,6 @@
 <meta name="twitter:image" content="https://gitee.com/qtt1025.gitee.io/img/boke.jpg">
   
   
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
   
   <title>使用Hexo+gitee搭建博客 - Hexo</title>
 
@@ -75,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"gitee.com","root":"/qtt1025.gitee.io/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/qtt1025.gitee.io/local-search.xml"};
+    var CONFIG = {"hostname":"gitee.com","root":"/qtt1025.gitee.io/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"skCOCP3Fka0cRJHzGahtzb6E-gzGzoHsz","app_key":"gYVycZtWLzv6TqxcshSwesjw","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/qtt1025.gitee.io/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -98,6 +96,8 @@
 
   
 
+  
+    
   
 
 
@@ -260,9 +260,9 @@
     
     
       
-        <span id="busuanzi_container_page_pv" style="display: none">
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
           <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> 次
+          <span id="leancloud-page-views"></span> 次
         </span>
         
       
@@ -306,7 +306,7 @@
                 <p>docker + hexo + gitee + fluid搭建个人博客</p>
 <h2 id="拉取镜像并启动容器"><a href="#拉取镜像并启动容器" class="headerlink" title="拉取镜像并启动容器"></a>拉取镜像并启动容器</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull python:2.7 <span class="hljs-comment">#因为hexo对python3后的版本有权限问题所以需要3一下的</span><br>docker ps -a <span class="hljs-comment">#查看镜像</span><br>docker run -it -p 4001:4001 --name blog python /bin/bash <span class="hljs-comment">#创建容器并进入容器</span><br><span class="hljs-comment">#注意一定要映射端口否则在宿主机上无法访问4000端口</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131142415062.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131142415062"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131142415062.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131142415062"></p>
 <h2 id="Git安装配置"><a href="#Git安装配置" class="headerlink" title="Git安装配置"></a>Git安装配置</h2><p>注意：docker容器中已经存在git，可以不用下载</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt install git <span class="hljs-comment">#安装git</span><br>git --version <span class="hljs-comment">#查看当前git版本</span><br><span class="hljs-comment">#git version 2.20.1 输出结果</span><br></code></pre></td></tr></table></figure>
 
@@ -315,22 +315,22 @@
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash <span class="hljs-comment">#安装nvm</span><br>vim ~/.bash_profile <span class="hljs-comment">#新建并打开该文件</span><br><span class="hljs-comment">#配置环境变量</span><br><span class="hljs-comment">#export NVM_DIR=&quot;$HOME/.nvm&quot;</span><br><span class="hljs-comment">#[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \. &quot;$NVM_DIR/nvm.sh&quot; # This loads nvm</span><br><span class="hljs-built_in">source</span> ~/.bash_profile <span class="hljs-comment">#刷新配置</span><br>nvm --version <span class="hljs-comment">#查看版本</span><br><span class="hljs-comment">#0.33.8</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131151359712.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131151359712"></p>
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131153450486.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131153450486"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131151359712.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131151359712"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131153450486.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131153450486"></p>
 <h3 id="node安装配置"><a href="#node安装配置" class="headerlink" title="node安装配置"></a>node安装配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">nvm install 18.0.0 <span class="hljs-comment">#安装node</span><br>node -v <span class="hljs-comment">#查看版本</span><br><span class="hljs-comment">#v18.0.0</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131154022618.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131154022618"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131154022618.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131154022618"></p>
 <h2 id="hexo安装配置"><a href="#hexo安装配置" class="headerlink" title="hexo安装配置"></a>hexo安装配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-cli -g <span class="hljs-comment">#安装hexo</span><br>hexo -v <span class="hljs-comment">#查看版本</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131154513460.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131154513460"></p>
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131154553632.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131154553632"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131154513460.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131154513460"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131154553632.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131154553632"></p>
 <h2 id="创建博客"><a href="#创建博客" class="headerlink" title="创建博客"></a>创建博客</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo init username.gitee.io <span class="hljs-comment">#会在当前目录下创建一个username.gitee.io的文件夹（username.gitee.io可以随意替换）</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131155333408.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131155333408"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131155333408.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131155333408"></p>
 <h2 id="安装更新主题"><a href="#安装更新主题" class="headerlink" title="安装更新主题"></a>安装更新主题</h2><p>参考：<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/start/#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98">https://hexo.fluid-dev.com/docs/start/#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98</a></p>
 <h2 id="启动博客"><a href="#启动博客" class="headerlink" title="启动博客"></a>启动博客</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean <span class="hljs-comment">#清除缓存</span><br>hexo g <span class="hljs-comment">#生成静态文件</span><br>hexo s -p 4001 <span class="hljs-comment">#运行并指定端口4001</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/qtt1025/qtt1025.gitee.io.git/2023/01/30/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131161234947.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131161234947"></p>
+<p><img src="%E4%BD%BF%E7%94%A8Hexo+gitee%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230131161234947.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230131161234947"></p>
 
                 
               </div>
@@ -558,21 +558,40 @@
     
 
     
-      <div class="col-lg-7 mx-auto nopadding-x-md">
-        <div class="container custom mx-auto">
-          <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-        </div>
-      </div>
-    
   </main>
 
   <footer>
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="busuanzi_container_page_pv"> 总访问量：<span id="busuanzi_value_page_pv"></span>次 &  </span> <span id="busuanzi_container_page_uv"> 总访客数：<span id="busuanzi_value_page_uv"></span>人 </span> </div> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> # <div> # <span id="busuanzi_container_page_pv"> # 总访问量：<span id="busuanzi_value_page_pv"></span>次 &  # </span> # <span id="busuanzi_container_page_uv"> # 总访客数：<span id="busuanzi_value_page_uv"></span>人 # </span> # </div> 
     </div>
   
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         次
+      </span>
+    
+    
+
+  
+</div>
+
   
   
   
@@ -718,9 +737,9 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/qtt1025.gitee.io/js/local-search.js" ></script>
+  <script defer src="/qtt1025.gitee.io/js/leancloud.js" ></script>
 
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+  <script  src="/qtt1025.gitee.io/js/local-search.js" ></script>
 
 
 
