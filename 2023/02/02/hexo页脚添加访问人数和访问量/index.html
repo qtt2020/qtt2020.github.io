@@ -28,9 +28,9 @@
 <meta property="article:modified_time" content="2023-02-03T04:50:40.012Z">
 <meta property="article:author" content="qtt">
 <meta property="article:tag" content="hexo">
+<meta property="article:tag" content="fluid">
 <meta property="article:tag" content="访客数">
 <meta property="article:tag" content="访问量">
-<meta property="article:tag" content="fluid">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://gitee.com/qtt1025.gitee.io/img/yejiao.jpeg">
   
@@ -310,8 +310,10 @@
 <h2 id="不蒜子方式添加"><a href="#不蒜子方式添加" class="headerlink" title="不蒜子方式添加"></a>不蒜子方式添加</h2><p>修改_config.fluid.yml文件参数</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">custom_html:</span> <span class="hljs-string">&#x27;&lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;&lt;/script&gt;&#x27;</span> <span class="hljs-comment">#将该代码复制粘贴到_config.fluid.yml文件下</span><br><span class="hljs-attr">web_analytics:</span> <span class="hljs-comment">#将enable改为true，表示打开页面访问统计</span><br>	<span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br><span class="hljs-comment">#页脚，content中添加以下代码</span><br><span class="hljs-string">&lt;div&gt;</span><br>    <span class="hljs-string">&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_container_page_pv&quot;&gt;</span><br>    <span class="hljs-string">总访问量：&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_value_page_pv&quot;&gt;&lt;/span&gt;次</span> <span class="hljs-string">&amp;</span> <br>    <span class="hljs-string">&lt;/span&gt;</span><br>    <span class="hljs-string">&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_container_page_uv&quot;&gt;</span><br>    <span class="hljs-string">总访客数：&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_value_page_uv&quot;&gt;&lt;/span&gt;人</span><br>    <span class="hljs-string">&lt;/span&gt;</span><br><span class="hljs-string">&lt;/div&gt;</span><br><span class="hljs-comment">#注意：不蒜子在localhost域名下显示的不是真正的数据，无需在意</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="/qtt1025.gitee.io/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/image-20230202101258356.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230202101258356"></p>
-<p><img src="/qtt1025.gitee.io/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/image-20230202102610187.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload alt="image-20230202102610187"></p>
+<img src="/qtt1025.gitee.io/2023/02/02/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/image-20230202101258356.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload class title="image-20230202101258356">
+
+<img src="/qtt1025.gitee.io/2023/02/02/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/image-20230202102610187.png" srcset="/qtt1025.gitee.io/img/loading.gif" lazyload class title="image-20230202102610187">
+
 <h2 id="LeanCloud方式添加"><a href="#LeanCloud方式添加" class="headerlink" title="LeanCloud方式添加"></a>LeanCloud方式添加</h2><h3 id="使用leancloud需要申请账号（国内需要实名认证）"><a href="#使用leancloud需要申请账号（国内需要实名认证）" class="headerlink" title="使用leancloud需要申请账号（国内需要实名认证）"></a>使用leancloud需要申请账号（国内需要实名认证）</h3><p><strong>步骤：注册账号-实名认证-Email下发送验证请求（邮箱验证）-创建应用（开发版）-进入应用设置-&gt;应用凭证下，找到AppID和AppKey记录下来</strong></p>
 <h3 id="修改配置（-config-fluid-yml）"><a href="#修改配置（-config-fluid-yml）" class="headerlink" title="修改配置（_config.fluid.yml）"></a>修改配置（_config.fluid.yml）</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 添加阅读量统计，这里的id和key使用的是leancloud第三方服务，可以在该网站注册账号</span><br><span class="hljs-attr">web_analytics:</span>  <span class="hljs-comment"># 网页访问统计</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 改为true</span><br><span class="hljs-attr">leancloud:</span><br>    <span class="hljs-attr">app_id:</span><br>    <span class="hljs-attr">app_key:</span><br><span class="hljs-attr">views:</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 改为true</span><br>    <span class="hljs-attr">source:</span> <span class="hljs-string">&quot;leancloud&quot;</span> <span class="hljs-comment"># 设置统计来源</span><br><span class="hljs-attr">statistics:</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">source:</span> <span class="hljs-string">&quot;leancloud&quot;</span><br>    <span class="hljs-attr">pv_format:</span> <span class="hljs-string">&quot;总访问量 &#123;&#125; 次&quot;</span><br>    <span class="hljs-attr">uv_format:</span> <span class="hljs-string">&quot;总访客数 &#123;&#125; 次&quot;</span><br><span class="hljs-comment">#注意：LeanCloud在localhost域名下不会增加数据</span><br></code></pre></td></tr></table></figure>
 
@@ -350,11 +352,11 @@
       
         <a href="/qtt1025.gitee.io/tags/hexo/">#hexo</a>
       
+        <a href="/qtt1025.gitee.io/tags/fluid/">#fluid</a>
+      
         <a href="/qtt1025.gitee.io/tags/%E8%AE%BF%E5%AE%A2%E6%95%B0/">#访客数</a>
       
         <a href="/qtt1025.gitee.io/tags/%E8%AE%BF%E9%97%AE%E9%87%8F/">#访问量</a>
-      
-        <a href="/qtt1025.gitee.io/tags/fluid/">#fluid</a>
       
     </div>
   
