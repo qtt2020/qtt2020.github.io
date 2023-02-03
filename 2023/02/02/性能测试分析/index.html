@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/qtt1025.gittt.io/img/fluid.png">
+  <link rel="icon" href="/qtt1025.gittt.io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#e4e4e5">
+  <meta name="author" content="qtt">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="通过命令监控磁盘io、网络带宽、cpu、吞吐量、响应时间等，分析性能瓶颈可能存在的地方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能测试分析">
+<meta property="og:url" content="https://gitee.com/qtt1025/qtt1025.gitee.io.git/2023/02/02/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="通过命令监控磁盘io、网络带宽、cpu、吞吐量、响应时间等，分析性能瓶颈可能存在的地方">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/qtt1025.gittt.io/img/xingneng.jpg">
+<meta property="article:published_time" content="2023-02-02T07:32:17.000Z">
+<meta property="article:modified_time" content="2023-02-03T04:50:40.038Z">
+<meta property="article:author" content="qtt">
+<meta property="article:tag" content="命令">
+<meta property="article:tag" content="性能">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gitee.com/qtt1025.gittt.io/img/xingneng.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>性能测试分析 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/qtt1025.gittt.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/qtt1025.gittt.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/qtt1025.gittt.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"gitee.com","root":"/qtt1025.gittt.io/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/qtt1025.gittt.io/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/qtt1025.gittt.io/js/utils.js" ></script>
+  <script  src="/qtt1025.gittt.io/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/qtt1025.gittt.io/">
+      <strong>MyBlog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt1025.gittt.io/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt1025.gittt.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt1025.gittt.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt1025.gittt.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt1025.gittt.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/qtt1025.gittt.io/img/beijing1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="性能测试分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-02 07:32" pubdate>
+          2023年2月2日 早上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">性能测试分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>通过命令监控磁盘io、网络带宽、cpu、吞吐量、响应时间等，分析性能瓶颈可能存在的地方</p>
+<span id="more"></span>
+
+<h2 id="磁盘io监控结果分析（iostats-x-1）"><a href="#磁盘io监控结果分析（iostats-x-1）" class="headerlink" title="磁盘io监控结果分析（iostats -x 1）"></a>磁盘io监控结果分析（iostats -x 1）</h2><p><img src="%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/image-20230202154541916.png" srcset="/qtt1025.gittt.io/img/loading.gif" lazyload alt="image-20230202154541916"></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">%user：</span> <span class="hljs-comment"># CPU处在用户模式下的时间百分比。</span><br><span class="hljs-string">%nice：</span> <span class="hljs-comment"># CPU处在带NICE值的用户模式下的时间百分比。</span><br><span class="hljs-string">%system：</span> <span class="hljs-comment"># CPU处在系统模式下的时间百分比。</span><br><span class="hljs-string">%iowait：</span> <span class="hljs-comment"># CPU等待输入输出完成时间的百分比。</span><br><span class="hljs-string">%steal：</span> <span class="hljs-comment"># 管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比。</span><br><span class="hljs-string">%idle：</span> <span class="hljs-comment"># CPU空闲时间百分比。</span><br><span class="hljs-string">rrqm/s:</span>   <span class="hljs-comment"># 每秒进行 merge 的读操作数目。即 delta(rmerge)/s</span><br><span class="hljs-string">wrqm/s:</span>  <span class="hljs-comment"># 每秒进行 merge 的写操作数目。即 delta(wmerge)/s</span><br><span class="hljs-attr">r/s:</span> <span class="hljs-comment"># 每秒完成的读 I/O 设备次数。即 delta(rio)/s</span><br><span class="hljs-attr">w/s:</span> <span class="hljs-comment"># 每秒完成的写 I/O 设备次数。即 delta(wio)/s</span><br><span class="hljs-attr">rsec/s:</span> <span class="hljs-comment"># 每秒读扇区数。即 delta(rsect)/s</span><br><span class="hljs-attr">wsec/s:</span> <span class="hljs-comment"># 每秒写扇区数。即 delta(wsect)/s</span><br><span class="hljs-attr">rkB/s:</span> <span class="hljs-comment"># 每秒读K字节数。是 rsect/s 的一半，因为每扇区大小为512字节。(需要计算)</span><br><span class="hljs-attr">wkB/s:</span> <span class="hljs-comment"># 每秒写K字节数。是 wsect/s 的一半。(需要计算)</span><br><span class="hljs-attr">avgrq-sz:</span> <span class="hljs-comment"># 平均每次设备I/O操作的数据大小 (扇区)。delta(rsect+wsect)/delta(rio+wio)</span><br><span class="hljs-string">avgqu-sz:</span> <span class="hljs-comment"># 平均I/O队列长度。即 delta(aveq)/s/1000 (因为aveq的单位为毫秒)。</span><br><span class="hljs-string">await:</span> <span class="hljs-comment"># 平均每次设备I/O操作的等待时间 (毫秒)。即 delta(ruse+wuse)/delta(rio+wio)</span><br><span class="hljs-attr">svctm:</span> <span class="hljs-comment"># 平均每次设备I/O操作的服务时间 (毫秒)。即 delta(use)/delta(rio+wio)</span><br><span class="hljs-string">%util:</span> <span class="hljs-comment"># 一秒中有百分之多少的时间用于 I/O 操作，或者说一秒中有多少时间 I/O 队列是非空的。即 delta(use)/s/1000 (因为use的单位为毫秒)</span><br></code></pre></td></tr></table></figure>
+
+<p>1）%idle值高，表示CPU较空闲，如果%idle值高但系统响应慢时，有可能是CPU等待分配内存，此时应加大内存容量。</p>
+<p>2）%idle值如果持续低于10，那么系统的CPU处理能力相对较低，表明系统中最需要解决的资源是CPU。</p>
+<p>3）如果%util接近100%，说明生产的I&#x2F;O请求太多，I&#x2F;O系统已经满负荷，该磁盘可能已经存在瓶颈</p>
+<p>4）%idle小于70%IO压力较大，一般读取速度有较多的wait。同时结合vmstat b参数（等待资源的进程数）和wa参数（IO等待所占用的cpu时间的百分比，高过30%时IO压力过高）</p>
+<p>5）await与svctm参考，差值过高IO存在问题，await远大于svctm。说明I&#x2F;O队列过长，io响应太慢，需要进行优化，avgqu-sz比较大，也表示有部分io在等待。</p>
+<p>6）svctm 一般要小于 await (因为同时等待的请求的等待时间被重复计算了)，svctm 的大小一般和磁盘性能有关，CPU&#x2F;内存的负荷也会对其有影响，请求过多也会间接导致 svctm 的增加。await 的大小一般取决于服务时间(svctm) 以及 I&#x2F;O 队列的长度和 I&#x2F;O 请求的发出模式。如果 svctm 比较接近 await，说明 I&#x2F;O 几乎没有等待时间；如果 await 远大于 svctm，说明 I&#x2F;O 队列太长，应用得到的响应时间变慢，如果响应时间超过了用户可以容许的范围，这时可以考虑更换更快的磁盘，调整内核 elevator 算法，优化应用，或者升级 CPU。队列长度(avgqu-sz)也可作为衡量系统 I&#x2F;O 负荷的指标，但由于 avgqu-sz 是按照单位时间的平均值，所以不能反映瞬间的 I&#x2F;O 洪水。</p>
+<p>列子：</p>
+<p><img src="%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/image-20230202155252330.png" srcset="/qtt1025.gittt.io/img/loading.gif" lazyload alt="image-20230202155252330"></p>
+<p>上面的 iostat 输出表明秒有 28.57 次设备 I&#x2F;O 操作: 总IO(io)&#x2F;s &#x3D; r&#x2F;s(读) +w&#x2F;s(写) &#x3D; 1.02+27.55 &#x3D; 28.57 (次&#x2F;秒) 其中写操作占了主体 (w:r &#x3D; 27:1)。</p>
+<p>平均每次设备 I&#x2F;O 操作只需要 5ms 就可以完成，但每个 I&#x2F;O 请求却需要等上 78ms，为什么? 因为发出的 I&#x2F;O 请求太多 (每秒钟约 29 个)，假设这些请求是同时发出的，那么平均等待时间可以这样计算:</p>
+<p>平均等待时间 &#x3D; 单个 I&#x2F;O 服务时间 * ( 1 + 2 + … + 请求总数-1) &#x2F; 请求总数</p>
+<p>应用到上面的例子: 平均等待时间 &#x3D; 5ms * (1+2+…+28)&#x2F;29 &#x3D; 70ms，和 iostat 给出的78ms 的平均等待时间很接近。这反过来表明 I&#x2F;O 是同时发起的。</p>
+<p>每秒发出的 I&#x2F;O 请求很多 (约 29 个)，平均队列却不长 (只有 2 个 左右)，这表明这 29 个请求的到来并不均匀，大部分时间 I&#x2F;O 是空闲的。</p>
+<p>一秒中有 14.29% 的时间 I&#x2F;O 队列中是有请求的，也就是说，85.71% 的时间里 I&#x2F;O 系统无事可做，所有 29 个 I&#x2F;O 请求都在142毫秒之内处理掉了。</p>
+<p>delta(ruse+wuse)&#x2F;delta(io) &#x3D; await &#x3D; 78.21 &#x3D;&gt; delta(ruse+wuse)&#x2F;s &#x3D;78.21 * delta(io)&#x2F;s &#x3D; 78.21*28.57 &#x3D; 2232.8，表明每秒内的I&#x2F;O请求总共需要等待2232.8ms。所以平均队列长度应为 2232.8ms&#x2F;1000ms &#x3D; 2.23，而 iostat 给出的平均队列长度 (avgqu-sz) 却为 22.35，为什么?! 因为 iostat 中有 bug，avgqu-sz 值应为 2.23，而不是 22.35。</p>
+<h2 id="分析查看网络带宽占比情况"><a href="#分析查看网络带宽占比情况" class="headerlink" title="分析查看网络带宽占比情况"></a>分析查看网络带宽占比情况</h2><ul>
+<li>ifconfig（查看所有网口）</li>
+<li>安装ethtool工具，ethtool em1，查看网络带宽（1000MB&#x2F;S）</li>
+<li>查看nmon分析文件中NET sheet页中total-read和total-write的绝对值之和，如下图：total-read和total-write的绝对值之和约为60+320&#x3D;380KB&#x2F;s，网络带宽是1000Mb&#x2F;s,所以需要转换：380KB&#x2F;s *8&#x3D;3040Kb&#x2F;s &#x2F; 1024 &#x3D;2.97Mb&#x2F;s，与网卡带宽1000Mb&#x2F;s比较即可，占比只达到0.3%</li>
+</ul>
+<p><img src="%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/image-20230202155918206.png" srcset="/qtt1025.gittt.io/img/loading.gif" lazyload alt="image-20230202155918206"></p>
+<h2 id="cpu高load（进程队列的长度）、高内存、高-io"><a href="#cpu高load（进程队列的长度）、高内存、高-io" class="headerlink" title="cpu高load（进程队列的长度）、高内存、高 io"></a>cpu高load（进程队列的长度）、高内存、高 io</h2><p><img src="%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/image-20230202160236419.png" srcset="/qtt1025.gittt.io/img/loading.gif" lazyload alt="image-20230202160236419"></p>
+<p>根据top命令，发现PID为28555的Java进程占用CPU高达200%，出现故障。通过ps aux | grep PID命令，可以进一步确定是什么进程出现了问题</p>
+<h2 id="用户数、吞吐量、响应时间关系"><a href="#用户数、吞吐量、响应时间关系" class="headerlink" title="用户数、吞吐量、响应时间关系"></a>用户数、吞吐量、响应时间关系</h2><p><img src="%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/image-20230202160418339.png" srcset="/qtt1025.gittt.io/img/loading.gif" lazyload alt="image-20230202160418339"></p>
+<p>在这个图中，定义了三条曲线、三个区域、两个点以及三个状态描述。</p>
+<ul>
+<li><p>三条曲线:吞吐量的曲线(紫色)、使用率&#x2F;用户数曲线(绿色)、响应时间曲线(深蓝色)。</p>
+</li>
+<li><p>三个区域:轻负载区(Light Load)、重负载区(Heavy Load)、塌陷区(Buckle Zone)。</p>
+</li>
+<li><p>两个点:最优并发用户数(The Optimum Number of Concurrent Users)、最大并发用户数(The Maximum Number of ConcurrentUsers)。</p>
+</li>
+<li><p>三个状态描述:资源饱和(Resource Saturated)、吞吐下降(Throughput Falling)、用户受影响(End Users Effected)。</p>
+</li>
+</ul>
+<p>响应时间、吞吐量异常需要进一步定位查看磁盘io、内存、宽带、cpu等</p>
+<h2 id="性能指标含义"><a href="#性能指标含义" class="headerlink" title="性能指标含义"></a>性能指标含义</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">pv：</span> <span class="hljs-comment"># 代表一个页面请求</span><br><span class="hljs-string">hit：</span> <span class="hljs-comment"># 点击操作</span><br><span class="hljs-string">tps：</span> <span class="hljs-comment"># 一次接口请求</span><br><span class="hljs-string">Qps：</span> <span class="hljs-comment"># 请求中访问数据库次数 一个pv有n个hit，一个hit有n个tps，一个tps有n个qps</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="性能测试分类"><a href="#性能测试分类" class="headerlink" title="性能测试分类"></a>性能测试分类</h2><ul>
+<li>接口性能测试：针对当个接口进行测试</li>
+<li>场景（业务）性能测试：从实际出发分析用户的操作，在脚本操作上还原录制脚本可以将静态资源请求也录制出来更高程度还原真实场景一般都是做动态接口关键场景性能测试（瓶颈评估）</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/qtt1025.gittt.io/categories/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" class="category-chain-item">性能测试</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/qtt1025.gittt.io/tags/%E5%91%BD%E4%BB%A4/">#命令</a>
+      
+        <a href="/qtt1025.gittt.io/tags/%E6%80%A7%E8%83%BD/">#性能</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>性能测试分析</div>
+      <div>https://gitee.com/qtt1025/qtt1025.gitee.io.git/2023/02/02/性能测试分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>qtt</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/qtt1025.gittt.io/2023/02/02/ui%E8%87%AA%E5%8A%A8%E5%8C%96/" title="ui自动化">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ui自动化</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/qtt1025.gittt.io/2023/02/02/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/" title="hexo页脚添加访问人数和访问量">
+                        <span class="hidden-mobile">hexo页脚添加访问人数和访问量</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"skCOCP3Fka0cRJHzGahtzb6E-gzGzoHsz","appKey":"gYVycZtWLzv6TqxcshSwesjw","path":"window.location.pathname","placeholder":"吐槽一下～","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="busuanzi_container_page_pv"> 总访问量：<span id="busuanzi_value_page_pv"></span>次 &  </span> <span id="busuanzi_container_page_uv"> 总访客数：<span id="busuanzi_value_page_uv"></span>人 </span> </div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/qtt1025.gittt.io/js/events.js" ></script>
+<script  src="/qtt1025.gittt.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/qtt1025.gittt.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/qtt1025.gittt.io/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/qtt1025.gittt.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
