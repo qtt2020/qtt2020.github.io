@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>博客部署github并添加域名</title>
+    <link href="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/"/>
+    <url>/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/</url>
+    
+    <content type="html"><![CDATA[<p>将个人博客部署到github并修改访问域名，安装ssl证书使博客可以用https访问。总结部署过程中的一些问题</p><span id="more"></span><h2 id="部署github"><a href="#部署github" class="headerlink" title="部署github"></a>部署github</h2><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>登录github，新建一个仓库，仓库名最好用xxx.github.io(xxx表示你的博客根目录名)。注意：新建一个公有仓库并勾选添加readme文件</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207163649123.png" class title="image-20230207163649123"><h3 id="配置ssh密钥"><a href="#配置ssh密钥" class="headerlink" title="配置ssh密钥"></a>配置ssh密钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t ed25519 -C <span class="hljs-string">&#x27;你的邮箱账号&#x27;</span><br><span class="hljs-built_in">cat</span> ~/.ssh/id_ed25519.pub <span class="hljs-comment">#复制密钥</span><br></code></pre></td></tr></table></figure><p>到github中配置，settings-&gt;SSH and GPG keys-&gt;new ssh key，点击add ssh key</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207164720474.png" class title="image-20230207164720474"><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207164816039.png" class title="image-20230207164816039"><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207164950249.png" class title="image-20230207164950249"><h3 id="config-yaml配置"><a href="#config-yaml配置" class="headerlink" title="_config.yaml配置"></a>_config.yaml配置</h3><p>修改deploy下的repo为github仓库的地址，branch改为main。修改url为github上的访问地址，root为仓库名称</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207171722737.png" class title="image-20230207171722737"><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207171932403.png" class title="image-20230207171932403"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#在博客根目录输入命令</span><br>hexo clean <span class="hljs-comment">#清除缓存</span><br>hexo g <span class="hljs-comment">#生成静态文件</span><br>hexo d <span class="hljs-comment">#发布到github</span><br><span class="hljs-comment">#注意第一次会需要输入账号和密码，github的密码不是登录的密码</span><br></code></pre></td></tr></table></figure><h3 id="github配置"><a href="#github配置" class="headerlink" title="github配置"></a>github配置</h3><p>github密码，settings-&gt;developer settings-&gt;personal access tokens-&gt;tokens-&gt;generate new token(classic)记得复制，刷新页面后会找不到</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207172500552.png" class title="image-20230207172500552"><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207172610882.png" class title="image-20230207172610882"><p>接下来就可以用pages中的地址访问你的博客了</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207173419993.png" class title="image-20230207173419993"><h2 id="配置域名"><a href="#配置域名" class="headerlink" title="配置域名"></a>配置域名</h2><p>阿里云购买域名-&gt;进入工作台-&gt;域名解析-&gt;解析设置</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207174134412.png" class title="image-20230207174134412"><p>添加记录：类型为CNAME，记录值为你github上的访问地址。类型为A，记录值为域名IP，用ipconfig获取</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207174157103.png" class title="image-20230207174157103"><p>在博客根目录-&gt;source下新建一个CNAME文件没有后缀，文件名大些，内容为你购买的域名</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207174605399.png" class title="image-20230207174605399"><h2 id="配置ssl证书"><a href="#配置ssl证书" class="headerlink" title="配置ssl证书"></a>配置ssl证书</h2><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207180834242.png" class title="image-20230207180834242"><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207180913594.png" class title="image-20230207180913594"><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207181100256.png" class title="image-20230207181100256"><p>回到github-pages中勾选，Enforce HEEPS</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207181435574.png" class title="image-20230207181435574"><h2 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h2><h3 id="部署到github后css样式失效问题"><a href="#部署到github后css样式失效问题" class="headerlink" title="部署到github后css样式失效问题"></a>部署到github后css样式失效问题</h3><p>检查_config.yml文件中的配置，url和root地址样式失效基本都是这个问题</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207181829037.png" class title="image-20230207181829037"><h3 id="hexo-d提交报错"><a href="#hexo-d提交报错" class="headerlink" title="hexo d提交报错"></a>hexo d提交报错</h3><p>修改_config.yml文件下的repo地址为ssh的地址</p><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207182053515.png" class title="image-20230207182053515"><p>重新生成ssh密钥，并更新github上配置的密钥</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>个人博客</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>hexo</tag>
+      
+      <tag>GitHub</tag>
+      
+      <tag>域名</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>ui自动化</title>
     <link href="/qtt2020.github.io/2023/02/02/ui%E8%87%AA%E5%8A%A8%E5%8C%96/"/>
     <url>/qtt2020.github.io/2023/02/02/ui%E8%87%AA%E5%8A%A8%E5%8C%96/</url>
@@ -80,11 +109,11 @@
       
       <tag>hexo</tag>
       
-      <tag>fluid</tag>
-      
       <tag>访客数</tag>
       
       <tag>访问量</tag>
+      
+      <tag>fluid</tag>
       
     </tags>
     

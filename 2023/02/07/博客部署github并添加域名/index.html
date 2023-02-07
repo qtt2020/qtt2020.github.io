@@ -16,29 +16,28 @@
   <meta name="author" content="qtt">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文介绍两种方式，leancloud和不蒜子两种，在文章页脚添加总访问人数和总访问量（基于fluid主题）">
+    <meta name="description" content="将个人博客部署到github并修改访问域名，安装ssl证书使博客可以用https访问。总结部署过程中的一些问题">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo页脚添加访问人数和访问量">
-<meta property="og:url" content="https://qtt2020.github.io/2023/02/02/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/index.html">
+<meta property="og:title" content="博客部署github并添加域名">
+<meta property="og:url" content="https://qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="本文介绍两种方式，leancloud和不蒜子两种，在文章页脚添加总访问人数和总访问量（基于fluid主题）">
+<meta property="og:description" content="将个人博客部署到github并修改访问域名，安装ssl证书使博客可以用https访问。总结部署过程中的一些问题">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://qtt2020.github.io/qtt2020.github.io/img/yejiao.jpeg">
-<meta property="article:published_time" content="2023-02-02T01:58:47.000Z">
-<meta property="article:modified_time" content="2023-02-03T04:50:40.000Z">
+<meta property="og:image" content="https://qtt2020.github.io/qtt2020.github.io/img/yuming.jpg">
+<meta property="article:published_time" content="2023-02-07T08:22:36.000Z">
+<meta property="article:modified_time" content="2023-02-07T10:26:50.000Z">
 <meta property="article:author" content="qtt">
 <meta property="article:tag" content="hexo">
-<meta property="article:tag" content="访客数">
-<meta property="article:tag" content="访问量">
-<meta property="article:tag" content="fluid">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="域名">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://qtt2020.github.io/qtt2020.github.io/img/yejiao.jpeg">
+<meta name="twitter:image" content="https://qtt2020.github.io/qtt2020.github.io/img/yuming.jpg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>hexo页脚添加访问人数和访问量 - Hexo</title>
+  <title>博客部署github并添加域名 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -219,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="hexo页脚添加访问人数和访问量"></span>
+            <span id="subtitle" data-typed-text="博客部署github并添加域名"></span>
           
         </div>
 
@@ -230,8 +229,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-02-02 01:58" pubdate>
-          2023年2月2日 凌晨
+        <time datetime="2023-02-07 08:22" pubdate>
+          2023年2月7日 早上
         </time>
       </span>
     
@@ -242,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          915 字
         
       </span>
     
@@ -253,7 +252,7 @@
         
         
         
-          10 分钟
+          8 分钟
         
       </span>
     
@@ -299,24 +298,66 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">hexo页脚添加访问人数和访问量</h1>
+            <h1 style="display: none">博客部署github并添加域名</h1>
             
             
               <div class="markdown-body">
                 
-                <p>本文介绍两种方式，leancloud和不蒜子两种，在文章页脚添加总访问人数和总访问量（基于fluid主题）</p>
+                <p>将个人博客部署到github并修改访问域名，安装ssl证书使博客可以用https访问。总结部署过程中的一些问题</p>
 <span id="more"></span>
 
-<h2 id="不蒜子方式添加"><a href="#不蒜子方式添加" class="headerlink" title="不蒜子方式添加"></a>不蒜子方式添加</h2><p>修改_config.fluid.yml文件参数</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">custom_html:</span> <span class="hljs-string">&#x27;&lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;&lt;/script&gt;&#x27;</span> <span class="hljs-comment">#将该代码复制粘贴到_config.fluid.yml文件下</span><br><span class="hljs-attr">web_analytics:</span> <span class="hljs-comment">#将enable改为true，表示打开页面访问统计</span><br>	<span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br><span class="hljs-comment">#页脚，content中添加以下代码</span><br><span class="hljs-string">&lt;div&gt;</span><br>    <span class="hljs-string">&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_container_page_pv&quot;&gt;</span><br>    <span class="hljs-string">总访问量：&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_value_page_pv&quot;&gt;&lt;/span&gt;次</span> <span class="hljs-string">&amp;</span> <br>    <span class="hljs-string">&lt;/span&gt;</span><br>    <span class="hljs-string">&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_container_page_uv&quot;&gt;</span><br>    <span class="hljs-string">总访客数：&lt;span</span> <span class="hljs-string">id=&quot;busuanzi_value_page_uv&quot;&gt;&lt;/span&gt;人</span><br>    <span class="hljs-string">&lt;/span&gt;</span><br><span class="hljs-string">&lt;/div&gt;</span><br><span class="hljs-comment">#注意：不蒜子在localhost域名下显示的不是真正的数据，无需在意</span><br></code></pre></td></tr></table></figure>
+<h2 id="部署github"><a href="#部署github" class="headerlink" title="部署github"></a>部署github</h2><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>登录github，新建一个仓库，仓库名最好用xxx.github.io(xxx表示你的博客根目录名)。注意：新建一个公有仓库并勾选添加readme文件</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207163649123.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207163649123">
 
-<img src="/qtt2020.github.io/2023/02/02/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/image-20230202101258356.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230202101258356">
+<h3 id="配置ssh密钥"><a href="#配置ssh密钥" class="headerlink" title="配置ssh密钥"></a>配置ssh密钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t ed25519 -C <span class="hljs-string">&#x27;你的邮箱账号&#x27;</span><br><span class="hljs-built_in">cat</span> ~/.ssh/id_ed25519.pub <span class="hljs-comment">#复制密钥</span><br></code></pre></td></tr></table></figure>
 
-<img src="/qtt2020.github.io/2023/02/02/hexo%E9%A1%B5%E8%84%9A%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E4%BA%BA%E6%95%B0%E5%92%8C%E8%AE%BF%E9%97%AE%E9%87%8F/image-20230202102610187.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230202102610187">
+<p>到github中配置，settings-&gt;SSH and GPG keys-&gt;new ssh key，点击add ssh key</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207164720474.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207164720474">
 
-<h2 id="LeanCloud方式添加"><a href="#LeanCloud方式添加" class="headerlink" title="LeanCloud方式添加"></a>LeanCloud方式添加</h2><h3 id="使用leancloud需要申请账号（国内需要实名认证）"><a href="#使用leancloud需要申请账号（国内需要实名认证）" class="headerlink" title="使用leancloud需要申请账号（国内需要实名认证）"></a>使用leancloud需要申请账号（国内需要实名认证）</h3><p><strong>步骤：注册账号-实名认证-Email下发送验证请求（邮箱验证）-创建应用（开发版）-进入应用设置-&gt;应用凭证下，找到AppID和AppKey记录下来</strong></p>
-<h3 id="修改配置（-config-fluid-yml）"><a href="#修改配置（-config-fluid-yml）" class="headerlink" title="修改配置（_config.fluid.yml）"></a>修改配置（_config.fluid.yml）</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 添加阅读量统计，这里的id和key使用的是leancloud第三方服务，可以在该网站注册账号</span><br><span class="hljs-attr">web_analytics:</span>  <span class="hljs-comment"># 网页访问统计</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 改为true</span><br><span class="hljs-attr">leancloud:</span><br>    <span class="hljs-attr">app_id:</span><br>    <span class="hljs-attr">app_key:</span><br><span class="hljs-attr">views:</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 改为true</span><br>    <span class="hljs-attr">source:</span> <span class="hljs-string">&quot;leancloud&quot;</span> <span class="hljs-comment"># 设置统计来源</span><br><span class="hljs-attr">statistics:</span><br>    <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-attr">source:</span> <span class="hljs-string">&quot;leancloud&quot;</span><br>    <span class="hljs-attr">pv_format:</span> <span class="hljs-string">&quot;总访问量 &#123;&#125; 次&quot;</span><br>    <span class="hljs-attr">uv_format:</span> <span class="hljs-string">&quot;总访客数 &#123;&#125; 次&quot;</span><br><span class="hljs-comment">#注意：LeanCloud在localhost域名下不会增加数据</span><br></code></pre></td></tr></table></figure>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207164816039.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207164816039">
 
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207164950249.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207164950249">
+
+<h3 id="config-yaml配置"><a href="#config-yaml配置" class="headerlink" title="_config.yaml配置"></a>_config.yaml配置</h3><p>修改deploy下的repo为github仓库的地址，branch改为main。修改url为github上的访问地址，root为仓库名称</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207171722737.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207171722737">
+
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207171932403.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207171932403">
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#在博客根目录输入命令</span><br>hexo clean <span class="hljs-comment">#清除缓存</span><br>hexo g <span class="hljs-comment">#生成静态文件</span><br>hexo d <span class="hljs-comment">#发布到github</span><br><span class="hljs-comment">#注意第一次会需要输入账号和密码，github的密码不是登录的密码</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="github配置"><a href="#github配置" class="headerlink" title="github配置"></a>github配置</h3><p>github密码，settings-&gt;developer settings-&gt;personal access tokens-&gt;tokens-&gt;generate new token(classic)记得复制，刷新页面后会找不到</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207172500552.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207172500552">
+
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207172610882.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207172610882">
+
+<p>接下来就可以用pages中的地址访问你的博客了</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207173419993.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207173419993">
+
+<h2 id="配置域名"><a href="#配置域名" class="headerlink" title="配置域名"></a>配置域名</h2><p>阿里云购买域名-&gt;进入工作台-&gt;域名解析-&gt;解析设置</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207174134412.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207174134412">
+
+<p>添加记录：类型为CNAME，记录值为你github上的访问地址。类型为A，记录值为域名IP，用ipconfig获取</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207174157103.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207174157103">
+
+<p>在博客根目录-&gt;source下新建一个CNAME文件没有后缀，文件名大些，内容为你购买的域名</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207174605399.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207174605399">
+
+<h2 id="配置ssl证书"><a href="#配置ssl证书" class="headerlink" title="配置ssl证书"></a>配置ssl证书</h2><img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207180834242.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207180834242">
+
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207180913594.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207180913594">
+
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207181100256.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207181100256">
+
+<p>回到github-pages中勾选，Enforce HEEPS</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207181435574.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207181435574">
+
+<h2 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h2><h3 id="部署到github后css样式失效问题"><a href="#部署到github后css样式失效问题" class="headerlink" title="部署到github后css样式失效问题"></a>部署到github后css样式失效问题</h3><p>检查_config.yml文件中的配置，url和root地址样式失效基本都是这个问题</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207181829037.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207181829037">
+
+<h3 id="hexo-d提交报错"><a href="#hexo-d提交报错" class="headerlink" title="hexo d提交报错"></a>hexo d提交报错</h3><p>修改_config.yml文件下的repo地址为ssh的地址</p>
+<img src="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/image-20230207182053515.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230207182053515">
+
+<p>重新生成ssh密钥，并更新github上配置的密钥</p>
 
                 
               </div>
@@ -352,11 +393,9 @@
       
         <a href="/qtt2020.github.io/tags/hexo/">#hexo</a>
       
-        <a href="/qtt2020.github.io/tags/%E8%AE%BF%E5%AE%A2%E6%95%B0/">#访客数</a>
+        <a href="/qtt2020.github.io/tags/GitHub/">#GitHub</a>
       
-        <a href="/qtt2020.github.io/tags/%E8%AE%BF%E9%97%AE%E9%87%8F/">#访问量</a>
-      
-        <a href="/qtt2020.github.io/tags/fluid/">#fluid</a>
+        <a href="/qtt2020.github.io/tags/%E5%9F%9F%E5%90%8D/">#域名</a>
       
     </div>
   
@@ -368,8 +407,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>hexo页脚添加访问人数和访问量</div>
-      <div>https://qtt2020.github.io/2023/02/02/hexo页脚添加访问人数和访问量/</div>
+      <div>博客部署github并添加域名</div>
+      <div>https://qtt2020.github.io/2023/02/07/博客部署github并添加域名/</div>
     </div>
     <div class="license-meta">
       
@@ -381,7 +420,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年2月2日</div>
+          <div>2023年2月7日</div>
         </div>
       
       
@@ -413,18 +452,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/qtt2020.github.io/2023/02/02/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90/" title="性能测试分析">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">性能测试分析</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/qtt2020.github.io/2023/02/01/hexo+fluid%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/" title="hexo+fluid基础配置">
-                        <span class="hidden-mobile">hexo+fluid基础配置</span>
+                      <a href="/qtt2020.github.io/2023/02/02/ui%E8%87%AA%E5%8A%A8%E5%8C%96/" title="ui自动化">
+                        <span class="hidden-mobile">ui自动化</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
