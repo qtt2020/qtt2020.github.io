@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>djiango项目搭建</title>
+    <link href="/qtt2020.github.io/2023/02/08/djiango%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/"/>
+    <url>/qtt2020.github.io/2023/02/08/djiango%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>博客部署github并添加域名</title>
     <link href="/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/"/>
     <url>/qtt2020.github.io/2023/02/07/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2github%E5%B9%B6%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D/</url>
@@ -194,11 +207,11 @@
     
     <tags>
       
-      <tag>docker</tag>
-      
       <tag>hexo</tag>
       
       <tag>fluid</tag>
+      
+      <tag>docker</tag>
       
     </tags>
     
