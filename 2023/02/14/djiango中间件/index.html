@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/qtt2020.github.io/img/fluid.png">
+  <link rel="icon" href="/qtt2020.github.io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#e4e4e5">
+  <meta name="author" content="qtt">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Djiango中间件是在request和response处理过程中的一个插件。比如在request到达视图函数之前，我们可以使用中间件来做一些相关的事情，比如可以判断当前这个用户有没有登录，如果登录了，就绑定一个user对象到request上。也可以在response到达浏览器之前，做一些相关的处理，比如想要统一在response上设置一些cookie信息等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="djiango中间件">
+<meta property="og:url" content="https://qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Djiango中间件是在request和response处理过程中的一个插件。比如在request到达视图函数之前，我们可以使用中间件来做一些相关的事情，比如可以判断当前这个用户有没有登录，如果登录了，就绑定一个user对象到request上。也可以在response到达浏览器之前，做一些相关的处理，比如想要统一在response上设置一些cookie信息等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://qtt2020.github.io/qtt2020.github.io/img/zhongjianjian.jpeg">
+<meta property="article:published_time" content="2023-02-14T02:16:46.000Z">
+<meta property="article:modified_time" content="2023-02-14T09:38:38.000Z">
+<meta property="article:author" content="qtt">
+<meta property="article:tag" content="djiango">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="图片验证码">
+<meta property="article:tag" content="ajax">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://qtt2020.github.io/qtt2020.github.io/img/zhongjianjian.jpeg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>djiango中间件 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/qtt2020.github.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/qtt2020.github.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/qtt2020.github.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"qtt2020.github.io","root":"/qtt2020.github.io/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/qtt2020.github.io/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/qtt2020.github.io/js/utils.js" ></script>
+  <script  src="/qtt2020.github.io/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/qtt2020.github.io/">
+      <strong>MyBlog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt2020.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt2020.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt2020.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt2020.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/qtt2020.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/qtt2020.github.io/img/beijing1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="djiango中间件"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-14 02:16" pubdate>
+          2023年2月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          80 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">djiango中间件</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Djiango中间件是在<code>request</code>和<code>response</code>处理过程中的一个插件。比如在<code>request</code>到达视图函数之前，我们可以使用中间件来做一些相关的事情，比如可以判断当前这个用户有没有登录，如果登录了，就绑定一个<code>user</code>对象到<code>request</code>上。也可以在<code>response</code>到达浏览器之前，做一些相关的处理，比如想要统一在<code>response</code>上设置一些<code>cookie</code>信息等。</p>
+<span id="more"></span>
+
+<h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><img src="/qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/image-20230214112702448.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230214112702448">
+
+<img src="/qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/image-20230214112715489.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230214112715489">
+
+<h3 id="Django内置的中间件"><a href="#Django内置的中间件" class="headerlink" title="Django内置的中间件"></a>Django内置的中间件</h3><ul>
+<li><p><strong>django.middleware.common.CommonMiddleware：通用中间件</strong></p>
+<p>限制<code>settings.DISALLOWED_USER_AGENTS</code>中指定的请求头来访问本网站。<code>DISALLOWED_USER_AGENT</code>是一个正则表达式的列表</p>
+<p>如果开发者在定义<code>url</code>的时候，最后有一个斜杠。但是用户在访问<code>url</code>的时候没有提交这个斜杠，那么<code>CommonMiddleware</code>会自动的重定向到加了斜杠的<code>url</code>上去</p>
+</li>
+<li><p><strong>django.middleware.gzip.GZipMiddleware：将响应数据进行压缩。内容长度少于200个长度不会压缩</strong></p>
+</li>
+<li><p><strong>django.contrib.messages.middleware.MessageMiddleware：消息处理相关的中间件</strong></p>
+</li>
+<li><p><strong>django.middleware.security.SecurityMiddlewar<code>：做了一些安全处理的中间件。比如设置</code>XSS<code>防御的请求头，</code>http<code>协议转</code>https&#96;协议的工作等</strong></p>
+</li>
+<li><p><strong>django.contrib.sessions.middleware.SessionMiddleware：<code>session</code>中间件。会给<code>request</code>添加一个处理好的<code>session</code>对象</strong></p>
+</li>
+<li><p><strong><code>django.contrib.auth.middleware.AuthenticationMiddleware</code>：会给<code>request</code>添加一个<code>user</code>对象的中间件</strong></p>
+</li>
+<li><p><strong><code>django.middleware.csrf.CsrfViewMiddleware</code>：<code>CSRF</code>保护的中间件</strong></p>
+</li>
+<li><p><strong><code>django.middleware.clickjacking.XFrameOptionsMiddleware</code>：做了<code>clickjacking</code>攻击的保护</strong></p>
+<p><code>clickjacking</code>保护是攻击者在自己的病毒网站上，写一个诱惑用户点击的按钮，然后使用<code>iframe</code>的方式将受攻击的网站（比如银行网站）加载到自己的网站上去，并将其设置为透明的，用户就看不到，然后再把受攻击的网站（比如银行网站）的转账按钮定位到病毒网站的按钮上，这样用户在点击病毒网站上按钮的时候，实际上点击的是受攻击的网站（比如银行网站）上的按钮，从而实现了在不知不觉中给攻击者转账的功能</p>
+</li>
+<li><p><strong>缓存中间件：用来缓存一些页面</strong></p>
+<p><code>django.middleware.cache.UpdateCacheMiddleware</code></p>
+<p><code>django.middleware.cache.FetchFromCacheMiddleware</code></p>
+</li>
+</ul>
+<h3 id="自定义中间件"><a href="#自定义中间件" class="headerlink" title="自定义中间件"></a>自定义中间件</h3><img src="/qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/image-20230214162421318.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230214162421318">
+
+<h4 id="继承MiddlewareMixin"><a href="#继承MiddlewareMixin" class="headerlink" title="继承MiddlewareMixin"></a>继承MiddlewareMixin</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># process_request方法:</span><br><span class="hljs-comment"># 如果方法中没有返回值（返回None），继续向后走</span><br><span class="hljs-comment"># 如果有返回值 HttpResponse、render 、redirect，则不再继续向后执行。</span><br><span class="hljs-keyword">from</span> django.utils.deprecation <span class="hljs-keyword">import</span> MiddlewareMixin<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyMiddleware1</span>(<span class="hljs-title class_ inherited__">MiddlewareMixin</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_request</span>(<span class="hljs-params">self, request</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27; 请求处理</span><br><span class="hljs-string">        :param request:请求对象</span><br><span class="hljs-string">        :return: 一般没有返回值，但可以返回HttpResponse对象</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_view</span>(<span class="hljs-params">self, request, callback, callback_args, callback_kwargs</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27; 视图函数预处理</span><br><span class="hljs-string">        :param request: 请求对象</span><br><span class="hljs-string">        :param callback: 路由返回的视图函数地址</span><br><span class="hljs-string">        :param callback_args: 视图函数的位置参数（元组）</span><br><span class="hljs-string">        :param callback_kwargs: 视图函数的关键字参数（字典）</span><br><span class="hljs-string">        :return: 一般没有返回值，但可以返回HttpResponse对象</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_exception</span>(<span class="hljs-params">self, request, exception</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27; 视图函数异常处理</span><br><span class="hljs-string">        :param request: 请求对象</span><br><span class="hljs-string">        :param exception: 视图函数的异常对象</span><br><span class="hljs-string">        :return: 一般没有返回值，但可以返回HttpResponse对象</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_template_response</span>(<span class="hljs-params">self, request, response</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27; 视图函数返回值为拥有render方法的对象，该方法会执行</span><br><span class="hljs-string">        :param request: 请求对象</span><br><span class="hljs-string">        :param response: 响应对象</span><br><span class="hljs-string">        :return: 一定要返回response</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br>        <span class="hljs-keyword">return</span> response<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_response</span>(<span class="hljs-params">self, request, response</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27; 响应处理</span><br><span class="hljs-string">        :param request: 请求对象</span><br><span class="hljs-string">        :param response: 响应对象</span><br><span class="hljs-string">        :return: 一定要返回response</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br>        <span class="hljs-keyword">return</span> response<br>    <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyMiddleware2</span>(<span class="hljs-title class_ inherited__">MiddlewareMixin</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_request</span>(<span class="hljs-params">self, request</span>):<br>        <span class="hljs-keyword">pass</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：配置settings.py 在settings的中间件配置中需要加入app.存放中间件的文件.MyMiddleware1</strong></p>
+<h4 id="登录例子："><a href="#登录例子：" class="headerlink" title="登录例子："></a>登录例子：</h4><p>中间件py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django.http <span class="hljs-keyword">import</span> JsonResponse<br><span class="hljs-keyword">from</span> django.utils.deprecation <span class="hljs-keyword">import</span> MiddlewareMixin<br><span class="hljs-keyword">from</span> qtt.utils.token_jwt <span class="hljs-keyword">import</span> check_token<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">JwtAuthorizationMiddleware</span>(<span class="hljs-title class_ inherited__">MiddlewareMixin</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    用户需要通过请求头的方式来进行传输token，例如：</span><br><span class="hljs-string">    Authorization:jwt eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzM1NTU1NzksInVzZXJuYW1lIjoid3VwZWlxaSIsInVzZXJfaWQiOjF9.xj-7qSts6Yg5Ui55-aUOHJS4KSaeLq5weXMui2IIEJU</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-meta">    @staticmethod</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process_request</span>(<span class="hljs-params">request</span>):<br>        <span class="hljs-comment"># 如果是登录页面，则通过，以下接口不校验登录</span><br>        <span class="hljs-keyword">if</span> request.path_info <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;/login/&quot;</span>, <span class="hljs-string">&quot;/img/code/&quot;</span>, <span class="hljs-string">&quot;/register/&quot;</span>]:<br>            <span class="hljs-keyword">return</span><br><br>        <span class="hljs-comment"># 非登录页面需要校验token</span><br>        authorization = request.META.get(<span class="hljs-string">&#x27;HTTP_AUTHORIZATION&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br>        auth = authorization.split()<br>        <span class="hljs-comment"># 验证头信息的token信息是否合法</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> auth:<br>            <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;未获取到Authorization请求头&#x27;</span>, <span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>&#125;)<br>        <span class="hljs-keyword">if</span> auth[<span class="hljs-number">0</span>].lower() != <span class="hljs-string">&#x27;jwt&#x27;</span>:<br>            <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;Authorization请求头中认证方式错误&#x27;</span>, <span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>&#125;)<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(auth) == <span class="hljs-number">1</span>:<br>            <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&quot;非法Authorization请求头&quot;</span>, <span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>&#125;)<br>        <span class="hljs-keyword">elif</span> <span class="hljs-built_in">len</span>(auth) &gt; <span class="hljs-number">2</span>:<br>            <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&quot;非法Authorization请求头&quot;</span>, <span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>&#125;)<br><br>        token = auth[<span class="hljs-number">1</span>]<br>        <span class="hljs-comment"># 解密</span><br>        result = check_token(token)<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> result[<span class="hljs-string">&#x27;status&#x27;</span>]:<br>            <span class="hljs-keyword">return</span> JsonResponse(result)<br>        <span class="hljs-comment"># 将解密后数据赋值给user_info</span><br>        request.user_info = result[<span class="hljs-string">&#x27;data&#x27;</span>]<br></code></pre></td></tr></table></figure>
+
+<p>settings.py配置</p>
+<img src="/qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/image-20230214164610715.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230214164610715">
+
+<p>封装校验登录方法py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> datetime<br><br><span class="hljs-keyword">import</span> jwt<br><br><span class="hljs-keyword">from</span> qtt_pro <span class="hljs-keyword">import</span> settings<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">create_token</span>(<span class="hljs-params">payload</span>):<br>    salt = settings.SECRET_KEY.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)<br><br>    <span class="hljs-comment"># 构造header</span><br>    headers = &#123;<br>        <span class="hljs-string">&#x27;typ&#x27;</span>: <span class="hljs-string">&#x27;jwt&#x27;</span>,<br>        <span class="hljs-string">&#x27;alg&#x27;</span>: <span class="hljs-string">&#x27;HS256&#x27;</span><br>    &#125;<br>    <span class="hljs-comment"># 构造payload</span><br>    payload[<span class="hljs-string">&#x27;exp&#x27;</span>] = datetime.datetime.now() + datetime.timedelta(minutes=<span class="hljs-number">5</span>)  <span class="hljs-comment"># 有效时间5分钟</span><br><br>    token = jwt.encode(payload=payload, key=salt, algorithm=<span class="hljs-string">&#x27;HS256&#x27;</span>, headers=headers)<br>    <span class="hljs-keyword">return</span> token<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_token</span>(<span class="hljs-params">token</span>):<br>    salt = settings.SECRET_KEY.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)<br>    result = &#123;<span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-literal">False</span>, <span class="hljs-string">&quot;data&quot;</span>: <span class="hljs-literal">None</span>, <span class="hljs-string">&quot;error&quot;</span>: <span class="hljs-literal">None</span>&#125;<br>    <span class="hljs-keyword">try</span>:<br>        data = jwt.decode(token, salt, algorithms=[<span class="hljs-string">&#x27;HS256&#x27;</span>])<br>        result[<span class="hljs-string">&quot;status&quot;</span>] = <span class="hljs-literal">True</span><br>        result[<span class="hljs-string">&#x27;data&#x27;</span>] = data<br>    <span class="hljs-keyword">except</span> jwt.ExpiredSignatureError:<br>        result[<span class="hljs-string">&#x27;error&#x27;</span>] = <span class="hljs-string">&#x27;token已失效&#x27;</span><br>    <span class="hljs-keyword">except</span> jwt.DecodeError:<br>        result[<span class="hljs-string">&#x27;error&#x27;</span>] = <span class="hljs-string">&#x27;token认证失败&#x27;</span><br>    <span class="hljs-keyword">except</span> jwt.InvalidTokenError:<br>        result[<span class="hljs-string">&#x27;error&#x27;</span>] = <span class="hljs-string">&#x27;无效的token&#x27;</span><br>    <span class="hljs-keyword">return</span> result<br></code></pre></td></tr></table></figure>
+
+<p>views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义method_decorator 免 csrf校验， dispatch表示所有请求，因为所有请求都先经过dispatch</span><br><span class="hljs-meta">@method_decorator(<span class="hljs-params">csrf_exempt, name=<span class="hljs-string">&quot;dispatch&quot;</span></span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">request</span>):<br>    <span class="hljs-keyword">if</span> request.method == <span class="hljs-string">&#x27;GET&#x27;</span>:<br>        form = LoginForm()<br>        <span class="hljs-keyword">return</span> render(request, <span class="hljs-string">&#x27;login.html&#x27;</span>, &#123;<span class="hljs-string">&#x27;form&#x27;</span>: form&#125;)<br>    user = <span class="hljs-built_in">eval</span>(request.body.decode()).get(<span class="hljs-string">&#x27;username&#x27;</span>)<br>    pwd = <span class="hljs-built_in">eval</span>(request.body.decode()).get(<span class="hljs-string">&#x27;password&#x27;</span>)<br>    <span class="hljs-keyword">if</span> user == <span class="hljs-string">&quot;&quot;</span>:<br>        <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>, <span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;用户名不能为空&#x27;</span>&#125;)<br>    <span class="hljs-keyword">if</span> pwd == <span class="hljs-string">&quot;&quot;</span>:<br>        <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>, <span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;密码不能为空&#x27;</span>&#125;)<br>    <span class="hljs-comment"># print(request.body.decode())</span><br>    <span class="hljs-comment"># 过滤数据库中数据，如果有对应的数据则返回第一个</span><br>    user_object = models.Users.objects.<span class="hljs-built_in">filter</span>(username=user, password=pwd).first()<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> user_object:<br>        <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>, <span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;用户名或密码错误&#x27;</span>&#125;)<br>    code_str = request.session.get(<span class="hljs-string">&#x27;image_code&#x27;</span>, <span class="hljs-string">&quot;&quot;</span>)<br>    code = <span class="hljs-built_in">eval</span>(request.body.decode()).get(<span class="hljs-string">&#x27;code&#x27;</span>)<br>    <span class="hljs-keyword">if</span> code_str.upper() != code.upper():<br>        <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">False</span>, <span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;验证码错误&#x27;</span>&#125;)<br><br>    <span class="hljs-comment"># 构造payload</span><br>    payload = &#123;<br>        <span class="hljs-comment"># &#x27;user&#x27;: user_object.id,  # 自定义用户ID</span><br>        <span class="hljs-string">&#x27;username&#x27;</span>: user_object.username,  <span class="hljs-comment"># 自定义用户名</span><br>    &#125;<br>    token = create_token(payload)<br>    <span class="hljs-keyword">return</span> JsonResponse(&#123;<span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-literal">True</span>, <span class="hljs-string">&#x27;token&#x27;</span>: token&#125;)<br></code></pre></td></tr></table></figure>
+
+<h2 id="图片验证码"><a href="#图片验证码" class="headerlink" title="图片验证码"></a>图片验证码</h2><h3 id="封装生成图片验证码py"><a href="#封装生成图片验证码py" class="headerlink" title="封装生成图片验证码py"></a>封装生成图片验证码py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image, ImageDraw, ImageFont, ImageFilter<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_code</span>(<span class="hljs-params">width=<span class="hljs-number">120</span>, height=<span class="hljs-number">30</span>, char_length=<span class="hljs-number">5</span>, font_file=<span class="hljs-string">&#x27;Monaco.ttf&#x27;</span>, font_size=<span class="hljs-number">28</span></span>):<br>    code = []<br>    img = Image.new(mode=<span class="hljs-string">&#x27;RGB&#x27;</span>, size=(width, height), color=(<span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>))<br>    draw = ImageDraw.Draw(img, mode=<span class="hljs-string">&#x27;RGB&#x27;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">rndChar</span>():<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        生成随机字母</span><br><span class="hljs-string">        :return:</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-comment"># return str(random.randint(0, 9))</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">chr</span>(random.randint(<span class="hljs-number">65</span>, <span class="hljs-number">90</span>))<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">rndColor</span>():<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        生成随机颜色</span><br><span class="hljs-string">        :return:</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-keyword">return</span> random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">255</span>), random.randint(<span class="hljs-number">10</span>, <span class="hljs-number">255</span>), random.randint(<span class="hljs-number">64</span>, <span class="hljs-number">255</span>)<br><br>    <span class="hljs-comment"># 写文字</span><br>    font = ImageFont.truetype(font_file, font_size)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(char_length):<br>        char = rndChar()<br>        code.append(char)<br>        h = random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>)<br>        draw.text([i * width / char_length, h], char, font=font, fill=rndColor())<br><br>    <span class="hljs-comment"># 写干扰点</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">40</span>):<br>        draw.point([random.randint(<span class="hljs-number">0</span>, width), random.randint(<span class="hljs-number">0</span>, height)], fill=rndColor())<br><br>    <span class="hljs-comment"># 写干扰圆圈</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">40</span>):<br>        draw.point([random.randint(<span class="hljs-number">0</span>, width), random.randint(<span class="hljs-number">0</span>, height)], fill=rndColor())<br>        x = random.randint(<span class="hljs-number">0</span>, width)<br>        y = random.randint(<span class="hljs-number">0</span>, height)<br>        draw.arc((x, y, x + <span class="hljs-number">4</span>, y + <span class="hljs-number">4</span>), <span class="hljs-number">0</span>, <span class="hljs-number">90</span>, fill=rndColor())<br><br>    <span class="hljs-comment"># 画干扰线</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>        x1 = random.randint(<span class="hljs-number">0</span>, width)<br>        y1 = random.randint(<span class="hljs-number">0</span>, height)<br>        x2 = random.randint(<span class="hljs-number">0</span>, width)<br>        y2 = random.randint(<span class="hljs-number">0</span>, height)<br><br>        draw.line((x1, y1, x2, y2), fill=rndColor())<br><br>    img = img.<span class="hljs-built_in">filter</span>(ImageFilter.EDGE_ENHANCE_MORE)<br>    <span class="hljs-keyword">return</span> img, <span class="hljs-string">&#x27;&#x27;</span>.join(code)<br></code></pre></td></tr></table></figure>
+
+<h3 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a>views.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">img_code</span>(<span class="hljs-params">request</span>):<br>    <span class="hljs-string">&quot;&quot;&quot; 生成图片验证码 &quot;&quot;&quot;</span><br><br>    <span class="hljs-comment"># 调用pillow函数，生成图片</span><br>    img, code_string = check_code()<br><br>    <span class="hljs-comment"># # 写入到自己的session中（以便于后续获取验证码再进行校验）</span><br>    request.session[<span class="hljs-string">&#x27;image_code&#x27;</span>] = code_string<br>    <span class="hljs-comment"># # 给Session设置60s超时</span><br>    request.session.set_expiry(<span class="hljs-number">60</span>)<br><br>    stream = BytesIO()<br>    img.save(stream, <span class="hljs-string">&#x27;png&#x27;</span>)<br>    <span class="hljs-keyword">return</span> HttpResponse(stream.getvalue())<br></code></pre></td></tr></table></figure>
+
+<h3 id="Login-html"><a href="#Login-html" class="headerlink" title="Login.html"></a>Login.html</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;form-group&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;id_code&quot;</span>&gt;</span>图片验证码<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;col-xs-7&quot;</span>&gt;</span><br>                    &#123;&#123; form.code &#125;&#125;<br>                    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;&quot;</span>&gt;</span>&#123;&#123; form.code.errors.0 &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;col-xs-5&quot;</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 125px&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;image_code&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;/img/code/&#x27;</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="ajax"><a href="#ajax" class="headerlink" title="ajax"></a>ajax</h2><h3 id="get请求"><a href="#get请求" class="headerlink" title="get请求"></a>get请求</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs js">$.<span class="hljs-title function_">ajax</span>(&#123;<br>    <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;/task/ajax/&#x27;</span>,<br>    <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;get&quot;</span>,<br>    <span class="hljs-attr">data</span>: &#123;<br>        <span class="hljs-attr">n1</span>: <span class="hljs-number">123</span>,<br>        <span class="hljs-attr">n2</span>: <span class="hljs-number">456</span><br>    &#125;,<br>    <span class="hljs-attr">success</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">res</span>) &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res);<br>    &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django.shortcuts <span class="hljs-keyword">import</span> render, HttpResponse<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">task_ajax</span>(<span class="hljs-params">request</span>):<br>    <span class="hljs-built_in">print</span>(request.GET)<br>    <span class="hljs-keyword">return</span> HttpResponse(<span class="hljs-string">&quot;成功了&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="post请求"><a href="#post请求" class="headerlink" title="post请求"></a>post请求</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">btnLoginBtn</span>(<span class="hljs-params"></span>) &#123;<br>    $(<span class="hljs-string">&quot;#loginBtn&quot;</span>).<span class="hljs-title function_">click</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>)  &#123;<br>        $.<span class="hljs-title function_">ajax</span>(&#123;<br>            <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;/login/&#x27;</span>,<br>            <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;POST&quot;</span>,<br>            <span class="hljs-attr">contentType</span>: <span class="hljs-string">&quot;application/json&quot;</span>,<br>            <span class="hljs-attr">dataType</span>: <span class="hljs-string">&quot;json&quot;</span>,<br>            <span class="hljs-attr">data</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<br>                &#123;<br>                    <span class="hljs-string">&quot;username&quot;</span>: $(<span class="hljs-string">&quot;#id_username&quot;</span>).<span class="hljs-title function_">val</span>(),<br>                    <span class="hljs-string">&quot;password&quot;</span>: $(<span class="hljs-string">&quot;#id_password&quot;</span>).<span class="hljs-title function_">val</span>(),<br>                    <span class="hljs-string">&quot;code&quot;</span>: $(<span class="hljs-string">&quot;#id_code&quot;</span>).<span class="hljs-title function_">val</span>()<br>                &#125;),<br>            <span class="hljs-attr">success</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">res</span>) &#123;<br>                <span class="hljs-keyword">if</span> (res.<span class="hljs-property">status</span>) &#123;<br>                    <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span> = <span class="hljs-string">&quot;/register/&quot;</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-title function_">alert</span>(res.<span class="hljs-property">error</span>);<br><br>                &#125;<br>            &#125;<br>        &#125;);<br>    &#125;);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js">$(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-comment">// 页面框架加载完成之后代码自动执行</span><br>    <span class="hljs-title function_">btnLoginBtn</span>();<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p><strong>通过元素id绑定事件</strong></p>
+<img src="/qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/image-20230214173348969.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230214173348969">
+
+<img src="/qtt2020.github.io/2023/02/14/djiango%E4%B8%AD%E9%97%B4%E4%BB%B6/image-20230214173451699.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230214173451699">
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/qtt2020.github.io/categories/Django/" class="category-chain-item">Django</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/qtt2020.github.io/tags/djiango/">#djiango</a>
+      
+        <a href="/qtt2020.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">#中间件</a>
+      
+        <a href="/qtt2020.github.io/tags/%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81/">#图片验证码</a>
+      
+        <a href="/qtt2020.github.io/tags/ajax/">#ajax</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>djiango中间件</div>
+      <div>https://qtt2020.github.io/2023/02/14/djiango中间件/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>qtt</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/qtt2020.github.io/2023/02/13/Form%E8%A1%A8%E5%8D%95%E6%93%8D%E4%BD%9C/" title="Form数据库操作">
+                        <span class="hidden-mobile">Form数据库操作</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"skCOCP3Fka0cRJHzGahtzb6E-gzGzoHsz","appKey":"gYVycZtWLzv6TqxcshSwesjw","path":"window.location.pathname","placeholder":"吐槽一下～","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="busuanzi_container_site_pv"> 总访问量<span id="busuanzi_value_site_pv"></span>次 &  </span> <span id="busuanzi_container_site_uv"> 总访客数<span id="busuanzi_value_site_uv"></span>人 </span> </div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/qtt2020.github.io/js/events.js" ></script>
+<script  src="/qtt2020.github.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/qtt2020.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/qtt2020.github.io/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/qtt2020.github.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
