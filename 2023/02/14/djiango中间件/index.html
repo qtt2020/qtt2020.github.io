@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://qtt2020.github.io/qtt2020.github.io/img/zhongjianjian.jpeg">
 <meta property="article:published_time" content="2023-02-14T02:16:46.000Z">
-<meta property="article:modified_time" content="2023-02-14T09:38:38.000Z">
+<meta property="article:modified_time" content="2023-02-14T09:48:37.000Z">
 <meta property="article:author" content="qtt">
 <meta property="article:tag" content="djiango">
 <meta property="article:tag" content="中间件">
@@ -320,15 +320,15 @@
 </li>
 <li><p><strong>django.contrib.messages.middleware.MessageMiddleware：消息处理相关的中间件</strong></p>
 </li>
-<li><p><strong>django.middleware.security.SecurityMiddlewar<code>：做了一些安全处理的中间件。比如设置</code>XSS<code>防御的请求头，</code>http<code>协议转</code>https&#96;协议的工作等</strong></p>
+<li><p><strong>django.middleware.security.SecurityMiddlewar：做了一些安全处理的中间件。比如设置XSS防御的请求头，http协议转https协议的工作等</strong></p>
 </li>
-<li><p><strong>django.contrib.sessions.middleware.SessionMiddleware：<code>session</code>中间件。会给<code>request</code>添加一个处理好的<code>session</code>对象</strong></p>
+<li><p><strong>django.contrib.sessions.middleware.SessionMiddleware：session中间件。会给request添加一个处理好的session对象</strong></p>
 </li>
-<li><p><strong><code>django.contrib.auth.middleware.AuthenticationMiddleware</code>：会给<code>request</code>添加一个<code>user</code>对象的中间件</strong></p>
+<li><p><strong>django.contrib.auth.middleware.AuthenticationMiddleware：会给request添加一个user对象的中间件</strong></p>
 </li>
-<li><p><strong><code>django.middleware.csrf.CsrfViewMiddleware</code>：<code>CSRF</code>保护的中间件</strong></p>
+<li><p><strong>django.middleware.csrf.CsrfViewMiddleware：CSRF保护的中间件</strong></p>
 </li>
-<li><p><strong><code>django.middleware.clickjacking.XFrameOptionsMiddleware</code>：做了<code>clickjacking</code>攻击的保护</strong></p>
+<li><p><strong>django.middleware.clickjacking.XFrameOptionsMiddleware：做了clickjacking攻击的保护</strong></p>
 <p><code>clickjacking</code>保护是攻击者在自己的病毒网站上，写一个诱惑用户点击的按钮，然后使用<code>iframe</code>的方式将受攻击的网站（比如银行网站）加载到自己的网站上去，并将其设置为透明的，用户就看不到，然后再把受攻击的网站（比如银行网站）的转账按钮定位到病毒网站的按钮上，这样用户在点击病毒网站上按钮的时候，实际上点击的是受攻击的网站（比如银行网站）上的按钮，从而实现了在不知不觉中给攻击者转账的功能</p>
 </li>
 <li><p><strong>缓存中间件：用来缓存一些页面</strong></p>
