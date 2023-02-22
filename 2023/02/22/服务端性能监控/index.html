@@ -16,29 +16,29 @@
   <meta name="author" content="qtt">
   <meta name="keywords" content="">
   
-    <meta name="description" content="jmeter+grafana+infuxdb进行性能监控，使用jmeter压测生成测试数据，然后通过jmeter中的后端监听异步将测试数据发送到influxDB中保存起来后，grafana通过拉取influxDB中的数据，将测试结果的相关数据展示到仪表盘中">
+    <meta name="description" content="docker下prometheus+grafana+ node_exporter+influxdb性能监控环境搭建，Prometheus 可以很好地记录任何纯数字时间序列。它既适用于以机器为中心的监视，也适用于高度动态的面向服务的体系结构的监视。在微服务世界中，它对多维数据收集和查询的支持是一种特别的优势。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker搭建JMeter+Grafana+Influxdb性能监控平台">
-<meta property="og:url" content="https://qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/index.html">
+<meta property="og:title" content="服务端性能监控">
+<meta property="og:url" content="https://qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="jmeter+grafana+infuxdb进行性能监控，使用jmeter压测生成测试数据，然后通过jmeter中的后端监听异步将测试数据发送到influxDB中保存起来后，grafana通过拉取influxDB中的数据，将测试结果的相关数据展示到仪表盘中">
+<meta property="og:description" content="docker下prometheus+grafana+ node_exporter+influxdb性能监控环境搭建，Prometheus 可以很好地记录任何纯数字时间序列。它既适用于以机器为中心的监视，也适用于高度动态的面向服务的体系结构的监视。在微服务世界中，它对多维数据收集和查询的支持是一种特别的优势。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://qtt2020.github.io/qtt2020.github.io/img/jiankong.png">
-<meta property="article:published_time" content="2023-02-20T08:32:22.000Z">
-<meta property="article:modified_time" content="2023-02-20T10:05:02.000Z">
+<meta property="og:image" content="https://qtt2020.github.io/qtt2020.github.io/img/fuwuduan.jpeg">
+<meta property="article:published_time" content="2023-02-22T15:13:36.000Z">
+<meta property="article:modified_time" content="2023-02-22T08:56:29.000Z">
 <meta property="article:author" content="qtt">
 <meta property="article:tag" content="docker">
-<meta property="article:tag" content="jmeter">
 <meta property="article:tag" content="Grafana">
 <meta property="article:tag" content="Influxdb">
+<meta property="article:tag" content="prometheus">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://qtt2020.github.io/qtt2020.github.io/img/jiankong.png">
+<meta name="twitter:image" content="https://qtt2020.github.io/qtt2020.github.io/img/fuwuduan.jpeg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>docker搭建JMeter+Grafana+Influxdb性能监控平台 - Hexo</title>
+  <title>服务端性能监控 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -219,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="docker搭建JMeter+Grafana+Influxdb性能监控平台"></span>
+            <span id="subtitle" data-typed-text="服务端性能监控"></span>
           
         </div>
 
@@ -230,8 +230,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-02-20 08:32" pubdate>
-          2023年2月20日 早上
+        <time datetime="2023-02-22 15:13" pubdate>
+          2023年2月22日 下午
         </time>
       </span>
     
@@ -242,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2k 字
+          2.1k 字
         
       </span>
     
@@ -299,58 +299,61 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">docker搭建JMeter+Grafana+Influxdb性能监控平台</h1>
+            <h1 style="display: none">服务端性能监控</h1>
             
             
               <div class="markdown-body">
                 
-                <p>jmeter+grafana+infuxdb进行性能监控，使用jmeter压测生成测试数据，然后通过jmeter中的后端监听异步将测试数据发送到influxDB中保存起来后，grafana通过拉取influxDB中的数据，将测试结果的相关数据展示到仪表盘中</p>
+                <p>docker下prometheus+grafana+ node_exporter+influxdb性能监控环境搭建，Prometheus 可以很好地记录任何纯数字时间序列。它既适用于以机器为中心的监视，也适用于高度动态的面向服务的体系结构的监视。在微服务世界中，它对多维数据收集和查询的支持是一种特别的优势。</p>
 <span id="more"></span>
 
-<h2 id="安装jmeter"><a href="#安装jmeter" class="headerlink" title="安装jmeter"></a>安装jmeter</h2><h3 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h3><p><strong>docker已安装好</strong></p>
-<h3 id="基于dockerfile安装jmeter"><a href="#基于dockerfile安装jmeter" class="headerlink" title="基于dockerfile安装jmeter"></a>基于dockerfile安装jmeter</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> openjdk  <span class="hljs-comment"># 安装jdk</span><br><br><span class="hljs-keyword">ENV</span> http_proxy <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-keyword">ENV</span> https_proxy <span class="hljs-string">&quot;&quot;</span><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> /jmeterdocker <span class="hljs-comment"># jmeter存放目录</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /jmeterdocker/test</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /jmeterdocker/test/input/jmx <span class="hljs-comment"># 测试脚本存放目录</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /jmeterdocker/test/input/testdata <span class="hljs-comment"># jmeter的测试数据存放目录</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /jmeterdocker/test/report/html <span class="hljs-comment"># jmeter生成的html报告存放目录</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /jmeterdocker/test/report/jtl <span class="hljs-comment"># jmeter生成的jtl报告存放目录</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p /jmeterdocker/test/report/outputdata <span class="hljs-comment"># #jmeter生成的csv文件，某些测试用例会生成csv数据文件，这些数据文件会被其它测试用例使用</span></span><br><br><span class="hljs-keyword">ENV</span> JMETER_VERSION=<span class="hljs-number">5.5</span><br><span class="hljs-keyword">ENV</span> JMETER_HOME=/jmeterdocker/apache-jmeter-$&#123;JMETER_VERSION&#125;<br><span class="hljs-keyword">ENV</span> JMETER_PATH=$&#123;JMETER_HOME&#125;/bin:$&#123;PATH&#125;<br><span class="hljs-keyword">ENV</span> PATH=$&#123;JMETER_HOME&#125;/bin:$&#123;PATH&#125;<br><br><span class="hljs-keyword">COPY</span><span class="language-bash"> ./123 /jmeterdocker <span class="hljs-comment"># 将本地jmeter安装包复制到docker中，apache-jmeter-5.5.tgz在123目录下</span></span><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">cd</span> /jmeterdocker \</span><br><span class="language-bash">    &amp;&amp; tar -xzf apache-jmeter-5.5.tgz \</span><br><span class="language-bash">    &amp;&amp; <span class="hljs-built_in">rm</span> apache-jmeter-5.5.tgz</span><br></code></pre></td></tr></table></figure>
+<h2 id="部署prometheus"><a href="#部署prometheus" class="headerlink" title="部署prometheus"></a>部署prometheus</h2><p>在要运行prometheus的路径下，新建prometheus.yml文件</p>
+<p>prometheus.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># my global config</span><br><span class="hljs-attr">global:</span><br>  <span class="hljs-attr">scrape_interval:</span> <span class="hljs-string">15s</span> <span class="hljs-comment"># Set the scrape interval to every 15 seconds. Default is every 1 minute.</span><br>  <span class="hljs-attr">evaluation_interval:</span> <span class="hljs-string">15s</span> <span class="hljs-comment"># Evaluate rules every 15 seconds. The default is every 1 minute.</span><br>  <span class="hljs-comment"># scrape_timeout is set to the global default (10s).</span><br><br><span class="hljs-comment"># Alertmanager configuration</span><br><span class="hljs-attr">alerting:</span><br>  <span class="hljs-attr">alertmanagers:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">static_configs:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">targets:</span><br>          <span class="hljs-comment"># - alertmanager:9093</span><br><br><span class="hljs-comment"># Load rules once and periodically evaluate them according to the global &#x27;evaluation_interval&#x27;.</span><br><span class="hljs-attr">rule_files:</span><br>  <span class="hljs-comment"># - &quot;first_rules.yml&quot;</span><br>  <span class="hljs-comment"># - &quot;second_rules.yml&quot;</span><br><br><span class="hljs-comment"># A scrape configuration containing exactly one endpoint to scrape:</span><br><span class="hljs-comment"># Here it&#x27;s Prometheus itself.</span><br><span class="hljs-attr">scrape_configs:</span><br>  <span class="hljs-comment"># The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">job_name:</span> <span class="hljs-string">&quot;prometheus&quot;</span><br><br>    <span class="hljs-comment"># metrics_path defaults to &#x27;/metrics&#x27;</span><br>    <span class="hljs-comment"># scheme defaults to &#x27;http&#x27;.</span><br><br>    <span class="hljs-attr">static_configs:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">targets:</span> [<span class="hljs-string">&quot;localhost:9090&quot;</span>]<br></code></pre></td></tr></table></figure>
 
-<h3 id="启动jmeter容器"><a href="#启动jmeter容器" class="headerlink" title="启动jmeter容器"></a>启动jmeter容器</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">docker <span class="hljs-keyword">run</span><span class="language-bash"> --name=<span class="hljs-string">&quot;jmeter1&quot;</span> --net=<span class="hljs-string">&quot;host&quot;</span> -v /tmp/jmeterspace/test/input/jmx:/jmeterdocker/test/input/jmx \</span><br><span class="language-bash">            -v /tmp/jmeterspace/test/input/testdata:/jmeterdocker/test/input/testdata \</span><br><span class="language-bash">            -v /tmp/jmeterspace/test/report/html:/jmeterdocker/test/report/html \</span><br><span class="language-bash">            -v /tmp/jmeterspace/test/report/jtl:/jmeterdocker/test/report/jtl \</span><br><span class="language-bash">            -v /tmp/jmeterspace/test/report/outputputdata:/jmeterdocker/test/report/outputdata \</span><br><span class="language-bash">            -it -d galaxi/jmeter:v1.</span><br><span class="hljs-comment"># -v后面的目录是本地主机需要新建的，与docker中的目录一一对应进行挂载</span><br></code></pre></td></tr></table></figure>
+<p>运行容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d --name prometheus -p 9090:9090 -v <span class="hljs-variable">$&#123;PWD&#125;</span>/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus:v1.0.0 --config.file=/etc/prometheus/prometheus.yml<br></code></pre></td></tr></table></figure>
 
-<h2 id="安装influxDB"><a href="#安装influxDB" class="headerlink" title="安装influxDB"></a>安装influxDB</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull tutum/influxdb <span class="hljs-comment"># 拉取influxdb镜像</span><br>docker run -d --name jmeter-influx -p 8086:8086 tutum/influxdb <span class="hljs-comment"># 运行镜像生成容器</span><br>docker <span class="hljs-built_in">exec</span> -it jmeter-influx /bin/bash <span class="hljs-comment"># 进入容器</span><br>influx <span class="hljs-comment"># 打开influx </span><br><span class="hljs-comment"># 查看数据库并创建jmeter数据库</span><br>show databases; <br>create database jmeter; <br>show databases; <br>use jmeter; <br>select * from jmeter; <br><span class="hljs-built_in">exit</span><br></code></pre></td></tr></table></figure>
+<p>浏览器访问：<a target="_blank" rel="noopener" href="http://ip:9090/">http://ip:9090</a></p>
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222152439007.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222152439007">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220170817477.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220170817477">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222152529903.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222152529903">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220171023575.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220171023575">
+<h2 id="创建node-exporter监控"><a href="#创建node-exporter监控" class="headerlink" title="创建node_exporter监控"></a>创建node_exporter监控</h2><p><strong>下载解压 node_exporter：<a target="_blank" rel="noopener" href="https://github.com/prometheus/node_exporter/releases/">https://github.com/prometheus/node_exporter/releases/</a></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.darwin-amd64.tar.gz <span class="hljs-comment">#下载包</span><br>tar -zxvf node_exporter-1.5.0.darwin-amd64.tar.gz<br><span class="hljs-built_in">cd</span> node_exporter-1.5.0.darwin-amd64/<br><span class="hljs-built_in">ls</span><br><span class="hljs-comment"># 启动node_exporter</span><br><span class="hljs-comment"># 自定义启动端口，且限定访问IP</span><br><span class="hljs-built_in">nohup</span> ./node_exporter --web.listen-address=<span class="hljs-string">&quot;192.168.12.5:9100&quot;</span> &amp;<br><span class="hljs-comment"># 不限定访问IP</span><br><span class="hljs-built_in">nohup</span> ./node_exporter --web.listen-address=<span class="hljs-string">&quot;:9100&quot;</span> &amp;<br><span class="hljs-comment"># 不置限定ip和端口，默认9100</span><br><span class="hljs-built_in">nohup</span> ./node_exporter &amp; <br></code></pre></td></tr></table></figure>
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220170941084.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220170941084">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222160456098.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222160456098">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220171123369.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220171123369">
+<p><strong>修改 Prometheus 配置文件，添加 node_exporter 配置：</strong></p>
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222160655075.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222160655075">
 
-<h2 id="安装配置grafana"><a href="#安装配置grafana" class="headerlink" title="安装配置grafana"></a>安装配置grafana</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull grafana/grafana <span class="hljs-comment"># 拉取grafana镜像</span><br>run -d --name jmeter-grafana -p 3000:3000 grafana/grafana <span class="hljs-comment"># 运行镜像并启动容器</span><br></code></pre></td></tr></table></figure>
+<p><strong>重启容器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">docker restart prometheus<br></code></pre></td></tr></table></figure>
 
-<h3 id="Grafana中配置influxDB"><a href="#Grafana中配置influxDB" class="headerlink" title="Grafana中配置influxDB"></a>Grafana中配置influxDB</h3><p>浏览器访问网址 <a href="http://127.0.0.1:3000，ip和端口看自己配置的，登录用户名和密码都为admin">http://127.0.0.1:3000，ip和端口看自己配置的，登录用户名和密码都为admin</a></p>
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220172358547.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220172358547">
+<p><strong>监控添加成功：</strong></p>
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222160813504.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222160813504">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220172432857.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220172432857">
+<h2 id="Grafana-配置"><a href="#Grafana-配置" class="headerlink" title="Grafana 配置"></a>Grafana 配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run --name grafana -d -p 3000:3000 grafana/grafana<br><span class="hljs-comment"># 启动成功后，在浏览器输入：http://IP:3000，进入到grafana界面，默认账户密码为admin/admin</span><br></code></pre></td></tr></table></figure>
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220172448008.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220172448008">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222163805025.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222163805025">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220172603107.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220172603107">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222163949722.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222163949722">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220172716343.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220172716343">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222164003968.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222164003968">
 
-<h3 id="Grafana模版配置"><a href="#Grafana模版配置" class="headerlink" title="Grafana模版配置"></a>Grafana模版配置</h3><img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220174654191.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220174654191">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222164116774.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222164116774">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220174841975.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220174841975">
+<p><strong>保存后，添加模版</strong>**</p>
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222164226142.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222164226142">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220175022814.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220175022814">
+<p><strong>可以在<a target="_blank" rel="noopener" href="https://grafana.com/grafana/dashboards/?search=Export%E6%9F%A5%E6%A8%A1%E7%89%88id">https://grafana.com/grafana/dashboards/?search=Export查模版id</a></strong></p>
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222164925518.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222164925518">
 
-<h3 id="插件id查看"><a href="#插件id查看" class="headerlink" title="插件id查看"></a>插件id查看</h3><p><strong>地址：<a target="_blank" rel="noopener" href="https://grafana.com/grafana/dashboards">https://grafana.com/grafana/dashboards</a></strong></p>
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220175131849.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220175131849">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222164859606.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222164859606">
 
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220175147103.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220175147103">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222165012849.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222165012849">
 
-<h2 id="配置Jmeter"><a href="#配置Jmeter" class="headerlink" title="配置Jmeter"></a>配置Jmeter</h2><img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220175857523.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220175857523">
-
-<img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220175909897.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220175909897">
-
-<h3 id="刷新页面"><a href="#刷新页面" class="headerlink" title="刷新页面"></a>刷新页面</h3><img src="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230220180030232.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230220180030232">
+<img src="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/image-20230222165115567.png" srcset="/qtt2020.github.io/img/loading.gif" lazyload class title="image-20230222165115567">
 
                 
               </div>
@@ -374,7 +377,7 @@
   
     <span>></span>
     
-  <a href="/qtt2020.github.io/categories/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/jmeter/" class="category-chain-item">jmeter</a>
+  <a href="/qtt2020.github.io/categories/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/Prometheus/" class="category-chain-item">Prometheus</a>
   
   
 
@@ -393,11 +396,11 @@
       
         <a href="/qtt2020.github.io/tags/docker/">#docker</a>
       
-        <a href="/qtt2020.github.io/tags/jmeter/">#jmeter</a>
-      
         <a href="/qtt2020.github.io/tags/Grafana/">#Grafana</a>
       
         <a href="/qtt2020.github.io/tags/Influxdb/">#Influxdb</a>
+      
+        <a href="/qtt2020.github.io/tags/prometheus/">#prometheus</a>
       
     </div>
   
@@ -409,8 +412,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>docker搭建JMeter+Grafana+Influxdb性能监控平台</div>
-      <div>https://qtt2020.github.io/2023/02/20/jmeter性能监控/</div>
+      <div>服务端性能监控</div>
+      <div>https://qtt2020.github.io/2023/02/22/服务端性能监控/</div>
     </div>
     <div class="license-meta">
       
@@ -422,7 +425,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年2月20日</div>
+          <div>2023年2月22日</div>
         </div>
       
       
@@ -454,18 +457,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/qtt2020.github.io/2023/02/22/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/" title="服务端性能监控">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">服务端性能监控</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/qtt2020.github.io/2023/02/15/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="djiango文件上传">
-                        <span class="hidden-mobile">djiango文件上传</span>
+                      <a href="/qtt2020.github.io/2023/02/20/jmeter%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/" title="docker搭建JMeter+Grafana+Influxdb性能监控平台">
+                        <span class="hidden-mobile">docker搭建JMeter+Grafana+Influxdb性能监控平台</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
